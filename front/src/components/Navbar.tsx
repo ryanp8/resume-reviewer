@@ -14,7 +14,7 @@ export default function Navbar() {
     router.push("/");
   };
   return (
-    <div className="mx-24 py-6 flex justify-between items-center">
+    <div className="mx-4 sm:mx-24 py-6 flex justify-between items-center">
       <Link href="/">
         <h3>Resume Reviewer</h3>
       </Link>

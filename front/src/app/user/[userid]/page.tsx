@@ -12,7 +12,6 @@ import "react-pdf/dist/esm/Page/TextLayer.css";
 import { JobListingForm } from "@/components/JobListingForm";
 import { ThreeDots } from "react-loader-spinner";
 
-
 export default function User() {
   const authContext = React.useContext(AuthContext);
   const inputFile = React.useRef(null);
@@ -106,11 +105,15 @@ export default function User() {
     setLoadingSimilarity(true);
     const accessToken = localStorage.getItem("accessToken");
     const response = await fetchWithTokenRetry(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/comparison?resume_id=${selectedResume}&job_text=${jobListing}`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/comparison?resume_id=${selectedResume}`,
       {
+        method: "POST",
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
+        body: JSON.stringify({
+          job_text: jobListing,
+        }),
       }
     );
     const json = await response.json();
@@ -119,9 +122,10 @@ export default function User() {
     console.log(json);
   };
   return (
-    <main className="mx-24">
-      <div className="my-12 flex">
-        <div className="w-1/2 mx-4">
+    <main className="lg:mx-24 md:mx-12 mb-12">
+      {/* <KeywordGraph /> */}
+      <div className="my-12 flex flex-col sm:flex-row">
+        <div className="w-full sm:w-1/2 mx-4">
           <input
             type="file"
             id="file"
@@ -181,30 +185,39 @@ export default function User() {
             return (
               <div
                 key={idx}
-                className={`rounded-md p-2 cursor-pointer ${
-                  selectedResume == id && "border-2 border-violet-500"
-                }`}
+                className={`rounded-md py-4 cursor-pointer`}
                 onClick={() => {
                   setSelectedResume(id);
                 }}
               >
-                <p>{data.filename}</p>
-                <object width="100%" height={400} data={`data:application/pdf;base64,${data.datastr as string}`}></object>
+                <p
+                  className={`my-3 ${
+                    selectedResume == id && "text-violet-500"
+                  }`}
+                >
+                  {selectedResume == id && <span>(Selected) </span>}
+                  {data.filename}
+                </p>
+                <object
+                  className="w-full h-[32rem]"
+                  data={`data:application/pdf;base64,${data.datastr as string}`}
+                ></object>
               </div>
             );
           })}
         </div>
-        <div className="w-1/2 mx-4">
-          <h3>Job Listing</h3>
+        <div className="w-full sm:w-1/2 mx-4">
+          <h3 className="mb-4">Job Listing</h3>
           <JobListingForm
             setJobListing={setJobListing}
             submitJobListing={submitJobListing}
           />
           <div className="my-5">
+            <h3 className="my-4">Results</h3>
             <h4>Cosine Similarity</h4>
             {loadingSimilarity && <ThreeDots width={50} height={25} />}
             {similarity != null && !loadingSimilarity && (
-              <h4>Result: {similarity}</h4>
+              <p className="text-base my-2 text-gray-700">{similarity}</p>
             )}
             <p className="text-gray-500">
               This score is calculated by aggregating the words in your resume
@@ -216,6 +229,7 @@ export default function User() {
           </div>
         </div>
       </div>
+      <h3>Analytics</h3>
       <KeywordGraph />
     </main>
   );
