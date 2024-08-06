@@ -3,7 +3,7 @@ lambda-back
 venv
 *.pem
 *.ini
-main.py
+client.py
 test.py
 __pycache__
 *.pdf
