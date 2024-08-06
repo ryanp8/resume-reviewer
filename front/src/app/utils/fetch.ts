@@ -1,4 +1,4 @@
-import { BASE_URL } from "@/config";
+
 
 export default async function fetchWithTokenRetry(
   url: string,
@@ -9,7 +9,7 @@ export default async function fetchWithTokenRetry(
     const refreshToken = localStorage.getItem("refreshToken");
     console.log(`Getting new access token with refresh token: ${refreshToken}`);
     console.log(`Current token: ${localStorage.getItem("accessToken")}`)
-    const refreshResponse = await fetch(`${BASE_URL}/refresh`, {
+    const refreshResponse = await fetch(`${process.env.BASE_URL}/refresh`, {
       headers: {
         Authorization: `Bearer ${refreshToken}`
       }

@@ -2,7 +2,6 @@
 import * as React from "react";
 import { KeywordGraph } from "@/components/KeywordGraph";
 import Link from "next/link";
-import { BASE_URL } from "@/config";
 
 export default function Home() {
   return (

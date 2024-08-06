@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { BASE_URL } from "@/config";
 import { AuthContext } from "@/contexts/AuthContext";
 import { ThreeDots } from "react-loader-spinner";
 
@@ -17,7 +16,7 @@ export default function Login() {
   ) => {
     e.preventDefault();
     setLoading(true);
-    const response = await fetch(`${BASE_URL}/login`, {
+    const response = await fetch(`${process.env.BASE_URL}/login`, {
       method: "POST",
       body: JSON.stringify({
         username: username,

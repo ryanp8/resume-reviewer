@@ -7,7 +7,6 @@ import { StyleSheet } from "@react-pdf/renderer";
 import { AuthContext } from "@/contexts/AuthContext";
 import { KeywordGraph } from "@/components/KeywordGraph";
 import { CiCirclePlus } from "react-icons/ci";
-import { BASE_URL } from "@/config";
 import fetchWithTokenRetry from "@/app/utils/fetch";
 
 import { pdfjs } from "react-pdf";
@@ -48,7 +47,7 @@ export default function User() {
     (async function () {
       setLoadingResumes(true);
       const accessToken = localStorage.getItem("accessToken");
-      const response = await fetchWithTokenRetry(`${BASE_URL}/resumes`, {
+      const response = await fetchWithTokenRetry(`${process.env.BASE_URL}/resumes`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -91,7 +90,7 @@ export default function User() {
       setUploading(true);
       console.log("submitting");
       const fileData = await convertToBase64(file);
-      await fetchWithTokenRetry(`${BASE_URL}/resumes`, {
+      await fetchWithTokenRetry(`${process.env.BASE_URL}/resumes`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -120,7 +119,7 @@ export default function User() {
     setLoadingSimilarity(true);
     const accessToken = localStorage.getItem("accessToken");
     const response = await fetchWithTokenRetry(
-      `${BASE_URL}/comparison?resume_id=${selectedResume}&job_text=${jobListing}`,
+      `${process.env.BASE_URL}/comparison?resume_id=${selectedResume}&job_text=${jobListing}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,

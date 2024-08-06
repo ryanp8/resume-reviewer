@@ -1,6 +1,5 @@
 import * as React from "react";
 import { BarChart } from "@mui/x-charts/BarChart";
-import { BASE_URL } from "@/config";
 import { ThreeDots } from "react-loader-spinner";
 
 export function KeywordGraph() {
@@ -10,7 +9,7 @@ export function KeywordGraph() {
   React.useEffect(() => {
     (async function () {
       setLoading(true);
-      const response = await fetch(`${BASE_URL}/keywords`);
+      const response = await fetch(`${process.env.BASE_URL}/keywords`);
       const json = await response.json();
       setWordFreqs(json);
       setLoading(false);
