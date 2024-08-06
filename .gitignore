@@ -1,0 +1,9 @@
+lambda
+lambda-back
+venv
+*.pem
+*.ini
+main.py
+test.py
+__pycache__
+*.pdf
