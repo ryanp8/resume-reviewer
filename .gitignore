@@ -7,3 +7,4 @@ main.py
 test.py
 __pycache__
 *.pdf
+.DS_Store
