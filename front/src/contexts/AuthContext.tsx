@@ -34,11 +34,13 @@ export default function AuthProvider({
       }
       return;
     }
+    console.log(accessToken)
     const decoded = decode(accessToken) as JwtPayload;
     setUserid(decoded.userid);
     setUsername(decoded.username);
     router.push(`/user/${decoded.userid}`);
     return;
+
   }, [accessToken]);
 
   return (

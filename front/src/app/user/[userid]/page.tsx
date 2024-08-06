@@ -30,6 +30,10 @@ export default function User() {
     (async function () {
       setLoadingResumes(true);
       const accessToken = localStorage.getItem("accessToken");
+      if (!accessToken) {
+        router.push('/login');
+        return;
+      }
       const response = await fetchWithTokenRetry(
         `${process.env.NEXT_PUBLIC_BASE_URL}/resumes`,
         {
@@ -38,8 +42,10 @@ export default function User() {
           },
         }
       );
-      const json = await response.json();
-      setResumes(json);
+      if (response.status == 200) {
+        const json = await response.json();
+        setResumes(json);
+      }
       setLoadingResumes(false);
     })();
   }, []);
@@ -179,9 +185,10 @@ export default function User() {
             </>
           )}
           {loadingResumes && <ThreeDots />}
-          {Object.entries(resumes).map((entry, idx) => {
+          {resumes && Object.entries(resumes).map((entry, idx) => {
             const id = entry[0];
             const data = entry[1] as any;
+            console.log(entry)
             return (
               <div
                 key={idx}
