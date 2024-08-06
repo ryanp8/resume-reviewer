@@ -9,7 +9,7 @@ export function KeywordGraph() {
   React.useEffect(() => {
     (async function () {
       setLoading(true);
-      const response = await fetch(`${process.env.BASE_URL}/keywords`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/keywords`);
       const json = await response.json();
       setWordFreqs(json);
       setLoading(false);

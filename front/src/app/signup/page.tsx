@@ -23,7 +23,7 @@ export default function Login() {
       return;
     }
     setLoading(true);
-    const response = await fetch(`${process.env.BASE_URL}/signup`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/signup`, {
       method: "POST",
       body: JSON.stringify({
         username: username,
@@ -121,7 +121,7 @@ export default function Login() {
                   }}
                 />
                 {!passwordsMatch && (
-                  <p className="text-red-500">Passwords don't match.</p>
+                  <p className="text-red-500">Passwords don&apos;t match.</p>
                 )}
               </div>
             </div>
@@ -140,7 +140,7 @@ export default function Login() {
           </form>
 
           <p className="mt-10 text-center text-sm text-gray-500">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link
               href="#"
               className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"

@@ -2,32 +2,16 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { Document, Page } from "react-pdf";
-import { StyleSheet } from "@react-pdf/renderer";
 import { AuthContext } from "@/contexts/AuthContext";
 import { KeywordGraph } from "@/components/KeywordGraph";
 import { CiCirclePlus } from "react-icons/ci";
 import fetchWithTokenRetry from "@/app/utils/fetch";
 
-import { pdfjs } from "react-pdf";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import { JobListingForm } from "@/components/JobListingForm";
 import { ThreeDots } from "react-loader-spinner";
 
-//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjI5MDA5NjQsInVzZXJpZCI6MSwidXNlcm5hbWUiOiJSeWFuIn0.WuiYa0yIQcKe2U0Ho-VKTLs5zk-1HpuEh6vL_dh-Vd0
-//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjI5MDA5NjQsInVzZXJpZCI6MSwidXNlcm5hbWUiOiJSeWFuIn0.WuiYa0yIQcKe2U0Ho-VKTLs5zk-1HpuEh6vL_dh-Vd0
-const styles = StyleSheet.create({
-  pdf: {
-    width: 500,
-    height: 500,
-  },
-});
-
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-  "pdfjs-dist/build/pdf.worker.min.mjs",
-  import.meta.url
-).toString();
 
 export default function User() {
   const authContext = React.useContext(AuthContext);
@@ -47,11 +31,14 @@ export default function User() {
     (async function () {
       setLoadingResumes(true);
       const accessToken = localStorage.getItem("accessToken");
-      const response = await fetchWithTokenRetry(`${process.env.BASE_URL}/resumes`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await fetchWithTokenRetry(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/resumes`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
       const json = await response.json();
       setResumes(json);
       setLoadingResumes(false);
@@ -90,7 +77,7 @@ export default function User() {
       setUploading(true);
       console.log("submitting");
       const fileData = await convertToBase64(file);
-      await fetchWithTokenRetry(`${process.env.BASE_URL}/resumes`, {
+      await fetchWithTokenRetry(`${process.env.NEXT_PUBLIC_BASE_URL}/resumes`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -119,7 +106,7 @@ export default function User() {
     setLoadingSimilarity(true);
     const accessToken = localStorage.getItem("accessToken");
     const response = await fetchWithTokenRetry(
-      `${process.env.BASE_URL}/comparison?resume_id=${selectedResume}&job_text=${jobListing}`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/comparison?resume_id=${selectedResume}&job_text=${jobListing}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -202,9 +189,7 @@ export default function User() {
                 }}
               >
                 <p>{data.filename}</p>
-                <Document file={`data:application/pdf;base64,${data.datastr as string}`}>
-                  <Page pageNumber={1} />
-                </Document>
+                <object width="100%" height={400} data={`data:application/pdf;base64,${data.datastr as string}`}></object>
               </div>
             );
           })}
@@ -218,10 +203,15 @@ export default function User() {
           <div className="my-5">
             <h4>Cosine Similarity</h4>
             {loadingSimilarity && <ThreeDots width={50} height={25} />}
-            {similarity != null && !loadingSimilarity && <h4>Result: {similarity}</h4>}
-            <p className="text-gray-500">This score is calculated by aggregating the words in your resume and the words in the job description.
-              The cosine similarity is then computed on the vectors of the frequencies of the words in each file. The score is between
-              0 and 1, with scores closer to 1 meaning that the two files are very similar.
+            {similarity != null && !loadingSimilarity && (
+              <h4>Result: {similarity}</h4>
+            )}
+            <p className="text-gray-500">
+              This score is calculated by aggregating the words in your resume
+              and the words in the job description. The cosine similarity is
+              then computed on the vectors of the frequencies of the words in
+              each file. The score is between 0 and 1, with scores closer to 1
+              meaning that the two files are very similar.
             </p>
           </div>
         </div>

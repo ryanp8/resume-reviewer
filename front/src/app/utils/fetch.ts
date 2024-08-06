@@ -9,7 +9,7 @@ export default async function fetchWithTokenRetry(
     const refreshToken = localStorage.getItem("refreshToken");
     console.log(`Getting new access token with refresh token: ${refreshToken}`);
     console.log(`Current token: ${localStorage.getItem("accessToken")}`)
-    const refreshResponse = await fetch(`${process.env.BASE_URL}/refresh`, {
+    const refreshResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/refresh`, {
       headers: {
         Authorization: `Bearer ${refreshToken}`
       }

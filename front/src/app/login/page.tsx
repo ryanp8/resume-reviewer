@@ -16,7 +16,7 @@ export default function Login() {
   ) => {
     e.preventDefault();
     setLoading(true);
-    const response = await fetch(`${process.env.BASE_URL}/login`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/login`, {
       method: "POST",
       body: JSON.stringify({
         username: username,
@@ -107,7 +107,7 @@ export default function Login() {
           </form>
 
           <p className="mt-10 text-center text-sm text-gray-500">
-            Don't have an account?{" "}
+            Don&apos;t have an account?
             <Link
               href="/signup"
               className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
