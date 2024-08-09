@@ -6,6 +6,9 @@ Full-stack, serverless website to review your resume. Users can upload their res
 Keywords are pulled from listings posted in the [PittCSC repo](https://github.com/SimplifyJobs/Summer2025-Internships)
 Included in this repo is the code for the frontend and the scraper.
 
+![home](https://github.com/ryanp8/resume-reviewer/blob/main/front/public/home.png)
+![dash](https://github.com/ryanp8/resume-reviewer/blob/main/front/public/dashboard.png)
+
 ### Technologies used
 1. Python
 2. Typescript
