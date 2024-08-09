@@ -188,7 +188,6 @@ export default function User() {
           {resumes && Object.entries(resumes).map((entry, idx) => {
             const id = entry[0];
             const data = entry[1] as any;
-            console.log(entry)
             return (
               <div
                 key={idx}

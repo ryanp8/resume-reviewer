@@ -5,6 +5,8 @@ export default async function fetchWithTokenRetry(
   options: RequestInit
 ) {
   const response = await fetch(url, options);
+  console.log(`Made request with: ${localStorage.getItem("accessToken")}`)
+
   if (response.status == 403) {
     const refreshToken = localStorage.getItem("refreshToken");
     console.log(`Getting new access token with refresh token: ${refreshToken}`);

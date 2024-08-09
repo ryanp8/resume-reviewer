@@ -34,7 +34,6 @@ export default function AuthProvider({
       }
       return;
     }
-    console.log(accessToken)
     const decoded = decode(accessToken) as JwtPayload;
     setUserid(decoded.userid);
     setUsername(decoded.username);

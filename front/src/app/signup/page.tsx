@@ -11,6 +11,7 @@ export default function Login() {
   const [confirmPassword, setConfirmPassword] = React.useState("");
   const [loading, setLoading] = React.useState(false);
   const [passwordsMatch, setPasswordsMatch] = React.useState(true);
+  const [error, setError] = React.useState("");
   const authContext = React.useContext(AuthContext);
 
   const handleSubmit = async (
@@ -35,6 +36,8 @@ export default function Login() {
       localStorage.setItem("accessToken", json.accessToken);
       localStorage.setItem("refreshToken", json.refreshToken);
       authContext?.setAccessToken(json.accessToken);
+    } else if (response.status == 400) {
+      setError("User already exists");
     }
     setLoading(false);
   };
@@ -126,6 +129,8 @@ export default function Login() {
               </div>
             </div>
 
+            {error && <p className="text-red-500">{error}</p>}
+
             <div>
               <button
                 type="submit"
@@ -140,12 +145,12 @@ export default function Login() {
           </form>
 
           <p className="mt-10 text-center text-sm text-gray-500">
-            Don&apos;t have an account?{" "}
+            Already have an account?{" "}
             <Link
-              href="#"
+              href="/login"
               className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
             >
-              Sign up
+              Login
             </Link>
           </p>
         </div>
