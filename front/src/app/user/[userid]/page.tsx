@@ -34,6 +34,12 @@ export default function User() {
         router.push('/login');
         return;
       }
+      const decoded = JSON.parse(window.atob(accessToken.split(".")[1]));
+      if (Date.now() >= decoded.exp * 1000) {
+        router.push("/login");
+        localStorage.setItem("accessToken", "");
+        return
+      }
       const response = await fetchWithTokenRetry(
         `${process.env.NEXT_PUBLIC_BASE_URL}/resumes`,
         {

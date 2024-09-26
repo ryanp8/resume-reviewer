@@ -54,6 +54,7 @@ export default function AuthProvider({
       } else {
         setUserid(decoded.userid);
         setUsername(decoded.username);
+        setAccessToken(accessToken);
         router.push(`/user/${decoded.userid}`);
       }
     })();

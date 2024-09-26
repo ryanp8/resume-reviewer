@@ -4,6 +4,7 @@ export default async function fetchWithTokenRetry(
   url: string,
   options: RequestInit
 ) {
+  console.log("running fetchWithRetry")
   const response = await fetch(url, options);
   console.log(`Made request with: ${localStorage.getItem("accessToken")}`)
 
