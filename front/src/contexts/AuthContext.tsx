@@ -1,9 +1,10 @@
 "use client";
 
 import * as React from "react";
-import { decode, JwtPayload } from "jsonwebtoken";
+import { verify, JwtPayload } from "jsonwebtoken";
 import { useRouter } from "next/navigation";
 import { getCookie, getCookies, setCookie } from "cookies-next";
+import refreshAccessToken from "@/app/utils/refresh";
 
 interface AuthContextType {
   userid: string;
@@ -27,19 +28,33 @@ export default function AuthProvider({
   const router = useRouter();
 
   React.useEffect(() => {
-    if (!accessToken) {
-      const accessCookie = localStorage.getItem("accessToken");
-      if (accessCookie) {
-        setAccessToken(accessCookie);
+    (async function () {
+      if (!accessToken) {
+        const accessCookie = localStorage.getItem("accessToken");
+        if (accessCookie) {
+          setAccessToken(accessCookie);
+        }
+        return;
       }
-      return;
-    }
-    const decoded = decode(accessToken) as JwtPayload;
-    setUserid(decoded.userid);
-    setUsername(decoded.username);
-    router.push(`/user/${decoded.userid}`);
-    return;
-
+      const decoded = JSON.parse(window.atob(accessToken.split(".")[1]));
+      if (Date.now() >= decoded.exp * 1000) {
+        const refreshToken = localStorage.getItem("refreshToken");
+        if (!refreshToken) {
+          localStorage.setItem("accessToken", "");
+          return;
+        }
+        const newAccessToken = await refreshAccessToken();
+        if (!newAccessToken) {
+          localStorage.setItem("refreshToken", "");
+          return;
+        }
+        setAccessToken(accessToken);
+      } else {
+        setUserid(decoded.userid);
+        setUsername(decoded.username);
+        router.push(`/user/${decoded.userid}`);
+      }
+    })();
   }, [accessToken]);
 
   return (
