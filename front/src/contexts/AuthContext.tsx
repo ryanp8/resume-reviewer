@@ -41,11 +41,13 @@ export default function AuthProvider({
         const refreshToken = localStorage.getItem("refreshToken");
         if (!refreshToken) {
           localStorage.setItem("accessToken", "");
+          setAccessToken("");
           return;
         }
         const newAccessToken = await refreshAccessToken();
         if (!newAccessToken) {
           localStorage.setItem("refreshToken", "");
+          setAccessToken("");
           return;
         }
         setAccessToken(accessToken);
